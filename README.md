@@ -5,6 +5,81 @@
 <div align="center">
   <img height="200" src="https://files.catbox.moe/ed7ekj.jpg"  />
 </div>
-<h5 align="center">👍script ini belum memiliki banyak fitur,  jika inginkan membantu kami dalam pembuatan fitur di script ini silahkan tinggalkan commit di repository ini<br><br>🟢 script ini milik kalian, bebas mau di recode/jual</h5>
 <br clear="both">
-<h6 align="center">• Version : 1.0.0<br>• Type : Plugins<br>• Module : Commonjs</
+
+[![GROUP OFFICIAL](https://img.shields.io/badge/WhatsApp%20group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/CTQL9XFA0uk66xIYZWfKij) [![GROUP OFFICIAL](https://img.shields.io/badge/WhatsApp%20channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)]([https://chat.whatsapp.com/CTQL9XFA0uk66xIYZWfKij](https://whatsapp.com/channel/0029VaOhfUIAjPXTORInZf0d))
+
+
+
+![img](https://files.catbox.moe/r5rnqn.jpg)
+### Step by step
+```bash
+$ pkg upgrade && pkg update
+$ pkg install git -y
+$ pkg install nodejs -y
+$ pkg install ffmpeg -y
+$ pkg install imagemagick -y
+$ git clone https://github.com/LT-SYAII/KaguyaBot/
+$ cd KaguyaBot
+$ npm i
+$ npm start
+```
+
+## Bagaimana cara menambah fitur?
+Kamu dapat menambah fitur dengan simak contoh plugins dibawah 
+
+```Js
+module.exports = {
+    help: ["help"], //nama fitur kamu
+    usage: "*Little description*", //deskripsi singkat
+    command: ["command"], //untuk eksekusi fitur nya
+    category: ["category"], //fitur kamu termasuk kategori apa?
+    example: "Contoh : %cmd reply pessn bang", //Cara penggunaannya, kosongin jika fitur tersebut tidak perlu menggunakan Input apapun
+    run: async (m, {
+        kgy,
+        usedPrefix,
+        command,
+        text,
+        isOwner,
+        isPrems,
+        isMods,
+        isAdmin,
+        isBotAdmin,
+        chatUpdate
+        args
+      }) => {
+     //masukan kode anda disini 
+    },
+    wait: true, //menampilkan pesan menunggu 
+    owner: false, //Fitur ini Khusus owner
+    group: false, //Fitur ini khusus didalam group
+    private: false, //Fitur ini khusus di private chat
+    botadmin: false, //Fitur ini khusus ketikan bot menjadi admin
+    premium: false, //Fitur ini khusus pengguna premium
+    error: 0, //Menghitung total Error ( Jangan di ubah )
+    update: Date.now(), //kapan terakhir fitur ini di perbarui? ( Jangan di ubah )
+    description: "Deskripsi kan fitur ini disini" //kosongkan jika tidak ingin di isi
+}
+```
+Jika ingin membuat fitur yang dapat berjalan secara otomatis (seperti Antilink )
+kamu bisa tiru kode dibawah ini
+```js
+module.exports = {
+    event: async (m, {
+        kgy,
+        usedPrefix,
+        command,
+        text,
+        isOwner,
+        isPrems,
+        isMods,
+        isAdmin,
+        isBotAdmin,
+        chatUpdate
+        args
+      }) => {
+     //masukan kode anda disini 
+    }
+}
+```
+-----------------------------
