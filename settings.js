@@ -1,8 +1,4 @@
-/*
-🔴 Script Kaguya Sama 
-     BY LT-SYAII
- [========================]
- */
+
 const Function = require(process.cwd()+"/lib/function");
 const fs = require("fs");
 const path = require("path");
