@@ -1,5 +1,3 @@
-
-
 module.exports = {
     help: ["example"],
     usage: "*example code*",
@@ -44,6 +42,7 @@ module.exports = {
     private: false, //Fitur ini khusus di private chat
     botadmin: false, //Fitur ini khusus ketikan bot menjadi admin
     premium: false, //Fitur ini khusus pengguna premium
+    admin: false, //Fitur ini khusus admin group
     error: 0, //Menghitung total Error ( Jangan di ubah )
     update: Date.now(), //kapan terakhir fitur ini di perbarui? ( Jangan di ubah )
     description: "Deskripsi kan fitur ini disini" //kosongkan jika tidak ingin di isi
