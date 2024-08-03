@@ -29,6 +29,11 @@ $ npm start
 Kamu dapat menambah fitur dengan simak contoh plugins dibawah 
 
 ```Js
+/* [ Info singkat ]
+true = iya
+false = tidak
+ %cmd = prefix+command
+*/
 module.exports = {
     help: ["help"], //nama fitur kamu
     usage: "*Little description*", //deskripsi singkat
@@ -45,7 +50,7 @@ module.exports = {
         isMods,
         isAdmin,
         isBotAdmin,
-        chatUpdate
+        chatUpdate,
         args
       }) => {
      //masukan kode anda disini 
@@ -56,6 +61,7 @@ module.exports = {
     private: false, //Fitur ini khusus di private chat
     botadmin: false, //Fitur ini khusus ketikan bot menjadi admin
     premium: false, //Fitur ini khusus pengguna premium
+    admin: false, //Fitur ini khusus admin group
     error: 0, //Menghitung total Error ( Jangan di ubah )
     update: Date.now(), //kapan terakhir fitur ini di perbarui? ( Jangan di ubah )
     description: "Deskripsi kan fitur ini disini" //kosongkan jika tidak ingin di isi

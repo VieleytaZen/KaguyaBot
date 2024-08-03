@@ -10,7 +10,7 @@ module.exports = {
         let chat = db.data.chats[m.chat]
         let user = db.data.users[m.sender];
         let isGroupLink = linkRegex.exec(m.text);
-        if (chalk.antiLink && isGroupLink) {
+        if (isGroupLink) {
             if (isAdmin) return;
             if (!isBotAdmin) return;
             if (user.warn >= 3) {

@@ -1,3 +1,5 @@
+//© Create by L E X I C -  T E A M
+
 /*  [ Info singkat ]
  true = iya
  false = tidak
@@ -5,6 +7,7 @@
  */
 const moment = require('moment-timezone')
 const PhoneNum = require('awesome-phonenumber')
+let regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
 
 module.exports = {
     help: ["wastalk"], //nama fitur kamu
@@ -25,7 +28,7 @@ module.exports = {
         args
     }) => {
         let num = m.quoted?.sender || m.mentionedJid?.[0] || text
-        if (!num) throw `*• Example :* ${usedPrefix + cmd} *[Number]*`
+        if (!num) throw `*• Example :* ${usedPrefix + command} *[Number]*`
         num = num.replace(/\D/g, '') + '@s.whatsapp.net'
         if (!(await kgy.onWhatsApp(num))[0]?.exists) throw 'Nomor tidak terdaftar di aplikasi WhatsApp !'
         let img = await kgy.profilePictureUrl(num, 'image') || false
