@@ -1,4 +1,3 @@
-//© Create by L E X I C -  T E A M
 
 const fs = require("fs");
 
@@ -14,27 +13,13 @@ module.exports = {
         command,
         text
     }) => {
-        let fitur = Object.keys(features);
-        if (isNaN(text)) throw `*[ ⚠️ ]* Kesalahan input, ketik angka *1 -> ${fitur.length}*
-sesuai angka dibawah ini :
+        let fitur = Object.keys(features).map(a => a.split("features/")[1]);
+        if (!fitur.includes(text)) throw `*[ ⚠️ ]* plugins tidak ditemukan!
 
-${fitur.map((a, i) => `*${i + 1}.* ${a.split("features/")[1]}`).join("\n")}`
-
-        if (parseInt(text) < 1) throw `*[ ⚠️ ]* Kesalahan input, ketik angka *1 -> ${fitur.length}*
-sesuai angka dibawah ini :
-
-${fitur.map((a, i) => `*${i + 1}.* ${a.split("features/")[1]}`).join("\n")}`
-        if (parseInt(text) > fitur.length) throw `*[ ⚠️ ]* Kesalahan input, ketik angka *1 -> ${fitur.length}*
-sesuai angka dibawah ini :
-
-${fitur.map((a, i) => `*${i + 1}.* ${a.split("features/")[1]}`).join("\n")}`
-        if (parseInt(text) < 1) throw `*[ ⚠️ ]* Kesalahan input, ketik angka *1 -> ${fitur.length}*
-sesuai angka dibawah ini :
-
-${fitur.map((a, i) => `*${i + 1}.* ${a.split("features/")[1]}`).join("\n")}`
-
+*• List Plugins :*
+${fitur.map((a, i) => `*${i + 1}.* ${a}`).join("\n")}`
         let pilihan = fitur[parseInt(text) - 1]
-        let hasil = await fs.readFileSync(process.cwd() + pilihan).toString()
+        let hasil = await fs.readFileSync(process.cwd() + "/features/" + pilihan).toString()
         m.reply(hasil);
     },
     wait: true,

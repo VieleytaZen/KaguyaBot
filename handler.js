@@ -1,7 +1,4 @@
 const simple = require("./lib/simple.js");
-const {
-    Function
-} = require("./lib/function.js");
 const util = require("util");
 const moment = require("moment-timezone");
 const fs = require("fs");
@@ -11,7 +8,6 @@ const chalk = require("chalk");
 const {
     jidNormalizedUser
 } = require("baileys");
-const messageSent = false;
 
 (module.exports = {
     async handler(chatUpdate) {
@@ -117,16 +113,13 @@ ${owner.map((a, i) => `*• Contact ${i+1} :* wa.me/` + a).join("\n")}`
                 (m.isGroup ?
                     await (
                         await store.groupMetadata[m.chat]
-                    ).participants :
-                    []) || [];
+                    ).participants : []) || [];
             const user =
                 (m.isGroup ?
-                    participants.find((u) => kgy.decodeJid(u.id) === m.sender) :
-                    {}) || {};
+                    participants.find((u) => kgy.decodeJid(u.id) === m.sender) : {}) || {};
             const bot =
                 (m.isGroup ?
-                    participants.find((u) => kgy.decodeJid(u.id) == this.user.jid) :
-                    {}) || {};
+                    participants.find((u) => kgy.decodeJid(u.id) == this.user.jid) : {}) || {};
             const isRAdmin = (user && user.admin == "superadmin") || false;
             const isAdmin = isRAdmin || (user && user.admin == "admin") || false;
             const isBotAdmin = (bot && bot.admin) || false;
@@ -141,8 +134,7 @@ ${owner.map((a, i) => `*• Contact ${i+1} :* wa.me/` + a).join("\n")}`
                     kgy.prefix :
                     global.prefix;
                 let match = (
-                    _prefix instanceof RegExp ?
-                    [
+                    _prefix instanceof RegExp ? [
                         [_prefix.exec(m.text), _prefix]
                     ] :
                     Array.isArray(_prefix) ?
@@ -153,14 +145,12 @@ ${owner.map((a, i) => `*• Contact ${i+1} :* wa.me/` + a).join("\n")}`
                             new RegExp(str2Regex(p));
                         return [re.exec(m.text), re];
                     }) :
-                    typeof _prefix === "string" ?
-                    [
+                    typeof _prefix === "string" ? [
                         [
                             new RegExp(str2Regex(_prefix)).exec(m.text),
                             new RegExp(str2Regex(_prefix)),
                         ],
-                    ] :
-                    [
+                    ] : [
                         [
                             [], new RegExp()
                         ]
@@ -272,25 +262,12 @@ ${owner.map((a, i) => `*• Contact ${i+1} :* wa.me/` + a).join("\n")}`
                     m.cmd = command;
                     if (plugin.wait && m.isCmd) {
                         if (!m.isCmd) return;
-                        let arr = [
-                            "🕜",
-                            "🕜",
-                            "🕞",
-                            "🕞",
-                        ]
-                    await kgy.sendMessage(m.chat, {
-                          react: {
-                           text: "🕛",
-                            key: m.key,
-                        }})
-                        for (let i of arr) {
-                            await kgy.sendMessage(m.chat, {
-                              react: {
-                                text: i,
-                                key: m.key                
-                            }})
-                            await kgy.delay(500)
-                        }
+                        await kgy.sendMessage(m.chat, {
+                            react: {
+                                text: "🕛",
+                                key: m.key,
+                            }
+                        })
                     }
                     let xp = "exp" in plugin ? parseInt(plugin.exp) : 17;
                     if (xp > 9999999999999999999999)
@@ -436,11 +413,16 @@ Notifikasi telah di kirim ke nomor Owner bot jika fitur.ini masih Error selama *
                             let wel = pp;
                             let lea = pp;
                             await kgy.sendMessage(id, {
-                                image: {
-                                    url: pp
-                                },
-                                caption: text,
-                                mentions: kgy.parseMention(text)
+                                text: text,
+                                contextInfo: {
+                                    mentionedJid: kgy.parseMention(text),
+                                    externalAdReply: {
+                                        title: "• Notifikasi Group",
+                                        body: reasn,
+                                        mediaType: 1,
+                                        thumbnailUrl: pp
+                                    }
+                                }
                             })
                         }
                     }

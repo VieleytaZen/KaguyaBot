@@ -1,39 +1,39 @@
-//console.clear()
-
-console.log('Starting...');
 process.on('uncaughtException', console.error);
-const { spawn } = require('child_process');
+const {
+    spawn
+} = require('child_process');
 const path = require('path');
 const os = require('os');
 const CFonts = require('cfonts');
 const chalk = require('chalk');
 const unhandledRejections = new Map();
-console.log(chalk.yellow.bold('[ Starting ] ') + chalk.green.bold("Welcome In Terminal KaguyaBot!"));
 process.on('unhandledRejection', (reason, promise) => {
-unhandledRejections.set(promise, reason)
-console.log('Unhandled Rejection at:', promise, 'reason:', reason)
+    unhandledRejections.set(promise, reason)
+    console.log('Unhandled Rejection at:', promise, 'reason:', reason)
 })
 process.on('rejectionHandled', (promise) => {
-   unhandledRejections.delete(promise)
+    unhandledRejections.delete(promise)
 })
 process.on('Something went wrong', function(err) {
-console.log('Caught exception: ', err)
+    console.log('Caught exception: ', err)
 })
 
 function start() {
-   let args = [path.join(__dirname, 'kaguya.js'), ...process.argv.slice(2)];
-   let p = spawn(process.argv[0], args, { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
-   .on('message', data => {
-      if (data === 'reset') {
-         console.log('Restarting...');
-         p.kill();
-         delete p;
-      }
-   })
-   .on('exit', code => {
-      console.error('Exited with code:', code);
-      start();
-   });
+    let args = [path.join(__dirname, 'kaguya.js'), ...process.argv.slice(2)];
+    let p = spawn(process.argv[0], args, {
+            stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+        })
+        .on('message', data => {
+            if (data === 'reset') {
+                console.log('Restarting...');
+                p.kill();
+                delete p;
+            }
+        })
+        .on('exit', code => {
+            console.error('Exited with code:', code);
+            start();
+        });
 }
 
 

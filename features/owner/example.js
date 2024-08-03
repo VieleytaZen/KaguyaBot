@@ -1,9 +1,4 @@
-//© Create by L E X I C -  T E A M
 
-const fs = require("fs");
-const {
-    js
-} = require("js-beautify");
 
 module.exports = {
     help: ["example"],
@@ -20,7 +15,7 @@ module.exports = {
 /*  [ Info singkat ]
  true = iya
  false = tidak
- %cmd = prefix+commsnd
+ %cmd = prefix+command
 */
 module.exports = {
     help: ["help"], //nama fitur kamu
@@ -38,7 +33,7 @@ module.exports = {
         isMods,
         isAdmin,
         isBotAdmin,
-        chatUpdate
+        chatUpdate,
         args
       }) => {
      //masukan kode anda disini 

@@ -1,4 +1,3 @@
-
 (async () => {
     require("./settings");
     const {
@@ -43,7 +42,7 @@
     const chalk = require("chalk");
     const readdir = promisify(fs.readdir)
     const stat = promisify(fs.stat)
-  
+
     var low;
     try {
         low = require("lowdb");
@@ -71,52 +70,58 @@
         ).replace(/[|\\{}()[\]^$+*?.\-\^]/g, "\\$&") +
         "]",
     );
-     db = new Low(
-    /https?:\/\//.test(opts["db"] || "")
-      ? new cloudDBAdapter(opts["db"])
-      : new JSONFile(`${opts._[0] ? opts._[0] + "_" : ""}${settings.dataname}`),
-  );
+    db = new Low(
+        /https?:\/\//.test(opts["db"] || "") ?
+        new cloudDBAdapter(opts["db"]) :
+        new JSONFile(`${opts._[0] ? opts._[0] + "_" : ""}${settings.dataname}`),
+    );
 
-  DATABASE = db;
-  loadDatabase = async function loadDatabase() {
-    if (!db.READ) {
-        setInterval(async() => {
-        await db.write(db.data || {})
-       }, 2000)
-      }
-    if (db.data !== null) return;
-    db.READ = true;
-    await db.read();
-    db.READ = false;
-    db.data = {
-      users: {},
-      chats: {},
-      stats: {},
-      msgs: {},
-      sticker: {},
-      settings: {},
-      respon: {},
-      ...(db.data || {}),
+    DATABASE = db;
+    loadDatabase = async function loadDatabase() {
+        if (!db.READ) {
+            setInterval(async () => {
+                await db.write(db.data || {})
+            }, 2000)
+        }
+        if (db.data !== null) return;
+        db.READ = true;
+        await db.read();
+        db.READ = false;
+        db.data = {
+            users: {},
+            chats: {},
+            stats: {},
+            msgs: {},
+            sticker: {},
+            settings: {},
+            respon: {},
+            ...(db.data || {}),
+        };
+        db.chain = _.chain(db.data);
     };
-    db.chain = _.chain(db.data);
-  };
-  loadDatabase(); 
+    loadDatabase();
     global.authFolder = settings.sessions;
- 
-   const logger = pino({ timestamp: () => `,"time":"${new Date().toJSON()}"` }).child({ class: 'kgy' });
-      logger.level = 'fatal';
-   
-    global.store = makeInMemoryStore({ logger });
-    
+
+    const logger = pino({
+        timestamp: () => `,"time":"${new Date().toJSON()}"`
+    }).child({
+        class: 'kgy'
+    });
+    logger.level = 'fatal';
+
+    global.store = makeInMemoryStore({
+        logger
+    });
+
     function createTmpFolder() {
-   const folderName = "tmp";
-  const folderPath = path.join(__dirname, folderName);
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
-  console.log(chalk.green.bold(`[ Success ] Folder '${folderName}' berhasil dibuat.`));
+        const folderName = "tmp";
+        const folderPath = path.join(__dirname, folderName);
+        if (!fs.existsSync(folderPath)) {
+            fs.mkdirSync(folderPath);
+            console.log(chalk.green.bold(`[ Success ] Folder '${folderName}' berhasil dibuat.`));
+        }
     }
-}
-createTmpFolder();
+    createTmpFolder();
     const {
         state,
         saveState,
@@ -135,15 +140,15 @@ createTmpFolder();
 
     const question = (texto) =>
         new Promise((resolver) => rl.question(texto, resolver));
-        
-    store.readFromFile(process.cwd()+`/${global.authFolder}/store.json`)
-    
+
+    store.readFromFile(process.cwd() + `/${global.authFolder}/store.json`)
+
     const connectionOptions = {
         logger: pino({
             level: "silent",
         }),
         printQRInTerminal: !settings.use_pairing,
-        browser: Browsers.ubuntu("Edge"),        
+        browser: Browsers.ubuntu("Edge"),
         auth: {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(
@@ -154,12 +159,12 @@ createTmpFolder();
         markOnlineOnConnect: true,
         generateHighQualityLinkPreview: true,
         getMessage: async (key) => {
-         	if (store) {
-			const msg = await store.loadMessage(key.remoteJid, key.id);
-			return msg?.message || undefined;
-		}
-	
-		return proto.Message.fromObject({});
+            if (store) {
+                const msg = await store.loadMessage(key.remoteJid, key.id);
+                return msg?.message || undefined;
+            }
+
+            return proto.Message.fromObject({});
         },
         msgRetryCounterCache,
         defaultQueryTimeoutMs: undefined,
@@ -173,7 +178,7 @@ createTmpFolder();
             chalk.green.bold(chalk.blue.bold("> ")),
         );
         const code = await kgy.requestPairingCode(phoneNumber);
-      console.log(chalk.green.bold("[ Success ] Kode Pairing Anda : " + code?.match(/.{1,4}/g)?.join('-') || code));
+        console.log(chalk.green.bold("[ Success ] Kode Pairing Anda : " + code?.match(/.{1,4}/g)?.join('-') || code));
     }
     async function connectionUpdate(update) {
         const {
@@ -260,84 +265,93 @@ createTmpFolder();
         kgy.ev.on("connection.update", kgy.connectionUpdate);
         kgy.ev.on("creds.update", kgy.credsUpdate);
         kgy.ev.on('contacts.update', update => {
-		for (let contact of update) {
-			let id = jidNormalizedUser(contact.id);
-			if (store && store.contacts) store.contacts[id] = { ...(store.contacts?.[id] || {}), ...(contact || {}) };
-		}
-	});
-	kgy.ev.on('contacts.upsert', update => {
-		for (let contact of update) {
-			let id = jidNormalizedUser(contact.id);
-			if (store && store.contacts) store.contacts[id] = { ...(contact || {}), isContact: true };
-		}
-	});
-     kgy.ev.on('groups.update', updates => {
-		for (const update of updates) {
-			const id = update.id;
-			if (store.groupMetadata[id]) {
-				store.groupMetadata[id] = { ...(store.groupMetadata[id] || {}), ...(update || {}) };
-			}
-		}
-	});	
-       isInit = false;
+            for (let contact of update) {
+                let id = jidNormalizedUser(contact.id);
+                if (store && store.contacts) store.contacts[id] = {
+                    ...(store.contacts?.[id] || {}),
+                    ...(contact || {})
+                };
+            }
+        });
+        kgy.ev.on('contacts.upsert', update => {
+            for (let contact of update) {
+                let id = jidNormalizedUser(contact.id);
+                if (store && store.contacts) store.contacts[id] = {
+                    ...(contact || {}),
+                    isContact: true
+                };
+            }
+        });
+        kgy.ev.on('groups.update', updates => {
+            for (const update of updates) {
+                const id = update.id;
+                if (store.groupMetadata[id]) {
+                    store.groupMetadata[id] = {
+                        ...(store.groupMetadata[id] || {}),
+                        ...(update || {})
+                    };
+                }
+            }
+        });
+        isInit = false;
         return true;
     };
-console.log(chalk.blue.bold("[ Process ] Muat File di plugin Direktori"));
-global.features = {};
-let Scandir = async (dir) => {
-    let subdirs = await readdir(dir);
-    let files = await Promise.all(subdirs.map(async (subdir) => {
-        let res = path.resolve(dir, subdir);
-        return (await stat(res)).isDirectory() ? Scandir(res) : res;
-    }));
-    return files.reduce((a, f) => a.concat(f), []);
-};
+    console.log(chalk.blue.bold("[ Process ] Muat File di plugin Direktori"));
+    global.features = {};
+    let Scandir = async (dir) => {
+        let subdirs = await readdir(dir);
+        let files = await Promise.all(subdirs.map(async (subdir) => {
+            let res = path.resolve(dir, subdir);
+            return (await stat(res)).isDirectory() ? Scandir(res) : res;
+        }));
+        return files.reduce((a, f) => a.concat(f), []);
+    };
 
-try {
-    let files = await Scandir("./features");
-    let features = {};
-    for (let filename of files.map(a => a.replace(process.cwd(), ""))) {
-        try {
-            features[filename] = require(path.join(process.cwd(), filename));
-        } catch (e) {
-            console.log(chalk.red.bold(e));
-            delete features[filename];
-        }
-    }
-    const watcher = chokidar.watch(path.resolve("./features"), {
-        persistent: true,
-        ignoreInitial: true
-    });
-    watcher
-        .on('add', async (filename) => {
-            console.log(chalk.green.bold("[ New ] Plugin Baru Terdeteksi : " + filename.replace(process.cwd(), "")))
-            features[filename.replace(process.cwd(), "")] = require(filename);
-        }).on('change', async (filename) => {
-            if (require.cache[filename] && require.cache[filename].id === filename) {
-                features[filename.replace(process.cwd(), "")] = require.cache[filename].exports
-                console.log(chalk.blue.bold("[ Change ] Perubahan kode pada Files : " + filename.replace(process.cwd(), "")))
-                delete require.cache[filename];
+    try {
+        let files = await Scandir("./features");
+        let features = {};
+        for (let filename of files.map(a => a.replace(process.cwd(), ""))) {
+            try {
+                features[filename] = require(path.join(process.cwd(), filename));
+            } catch (e) {
+                console.log(chalk.red.bold(e));
+                delete features[filename];
             }
-            let err = syntaxerror(fs.readFileSync(filename), filename.replace(process.cwd(), ""))
-            if (err) kgy.logger.error(`syntax error while loading '${filename}'\n${err}`)
-            features[filename.replace(process.cwd(), "")] = require(filename);
-        }).on('unlink', (filename) => {
-            console.log(chalk.yellow.bold("[ Delete ] Sukses Hapus : " + filename.replace(process.cwd(), "")))
-            delete features[filename.replace(process.cwd(), "")]
+        }
+        const watcher = chokidar.watch(path.resolve("./features"), {
+            persistent: true,
+            ignoreInitial: true
         });
-    features = Object.fromEntries(Object.entries(features).sort(([a], [b]) => a.localeCompare(b)));
-    global.features = features;
-    console.log(chalk.green.bold(`[ Success ] Berhasil Memuat ${Object.keys(features).length} features`));
-} catch (e) {
-    console.error(e);
-}
- setInterval(async () => {
-		if (store.groupMetadata) fs.writeFileSync(process.cwd()+`/${global.authFolder}/store-group.json`, JSON.stringify(store.groupMetadata));
-		if (store.contacts) fs.writeFileSync(process.cwd()+`/${global.authFolder}/store-contacts.json`, JSON.stringify(store.contacts));
- store.writeToFile(process.cwd()+`/${global.authFolder}/store.json`);
-	}, 10 * 1000); 	
-	
- reloadHandler()
+        watcher
+            .on('add', async (filename) => {
+                console.log(chalk.green.bold("[ New ] Plugin Baru Terdeteksi : " + filename.replace(process.cwd(), "")))
+                features[filename.replace(process.cwd(), "")] = require(filename);
+            }).on('change', async (filename) => {
+                if (require.cache[filename] && require.cache[filename].id === filename) {
+                    features[filename.replace(process.cwd(), "")] = require.cache[filename].exports
+                    console.log(chalk.blue.bold("[ Change ] Perubahan kode pada Files : " + filename.replace(process.cwd(), "")))
+                    delete require.cache[filename];
+                }
+                let err = syntaxerror(fs.readFileSync(filename), filename.replace(process.cwd(), ""))
+                if (err) kgy.logger.error(`syntax error while loading '${filename}'\n${err}`)
+                features[filename.replace(process.cwd(), "")] = require(filename);
+            }).on('unlink', (filename) => {
+                console.log(chalk.yellow.bold("[ Delete ] Sukses Hapus : " + filename.replace(process.cwd(), "")))
+                delete features[filename.replace(process.cwd(), "")]
+            });
+        features = Object.fromEntries(Object.entries(features).sort(([a], [b]) => a.localeCompare(b)));
+        global.features = features;
+        console.log(chalk.green.bold(`[ Success ] Berhasil Memuat ${Object.keys(features).length} features`));
+    } catch (e) {
+        console.error(e);
+    }
+    setInterval(async () => {
+        if (store.groupMetadata) fs.writeFileSync(process.cwd() + `/${global.authFolder}/store-group.json`, JSON.stringify(store.groupMetadata));
+        if (store.contacts) fs.writeFileSync(process.cwd() + `/${global.authFolder}/store-contacts.json`, JSON.stringify(store.contacts));
+        store.writeToFile(process.cwd() + `/${global.authFolder}/store.json`);
+    }, 10 * 1000);
+
+    reloadHandler()
 })();
 
 function pickRandom(list) {
