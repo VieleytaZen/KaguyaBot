@@ -18,8 +18,8 @@ module.exports = {
 
 *• List Plugins :*
 ${fitur.map((a, i) => `*${i + 1}.* ${a}`).join("\n")}`
-        let pilihan = fitur[parseInt(text) - 1]
-        let hasil = await fs.readFileSync(process.cwd() + "/features/" + pilihan).toString()
+
+        let hasil = await fs.readFileSync(process.cwd() + "/features/" + text).toString()
         m.reply(hasil);
     },
     wait: true,

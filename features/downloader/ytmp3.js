@@ -19,7 +19,7 @@ module.exports = {
         command,
         text
     }) => {
-        let search = await yts(text);
+        let search = await yts(text.split("&")[0]);
         let hasil = await Func.random(search.videos)
         let cap = `┌─⭓「 *YOUTUBE MP3*」
 │ *• Durasi:* ${hasil.timestamp}
