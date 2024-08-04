@@ -21,7 +21,7 @@ global.settings = {
     },
    dataname: "kgy-db.json",
    sessions: "kgy-sessions",
-   use_pairing: false
+   use_pairing: true
 }
 global.Func = new Function()
 global.api = {
